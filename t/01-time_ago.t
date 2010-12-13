@@ -23,9 +23,9 @@ sub t {
 }
 
 my $ts = 1292174161;
-my $now = DateTime::TimeAgo::get_datetime_from_timestamp($ts);
+my $now = DateTime->from_epoch(epoch => $ts);
 
-is($now->datetime, '2010-12-12T18:16:01', 'Created DateTime object');
+is($now->datetime, '2010-12-12T17:16:01', 'Created DateTime object');
 
 my $future = $now + dur(seconds => 1);
 t($future, $now, 'in the future');

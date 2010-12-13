@@ -20,7 +20,7 @@ sub time_ago {
         croak('DateTime::TimeAgo::time_ago needs a DateTime object as first parameter')
     }
     if (not defined $now) {
-        $now = get_datetime_from_timestamp(time);
+        $now = DateTime->now();
     }
     if (not isa($now, 'DateTime')) {
         croak('Invalid second parameter provided to DateTime::TimeAgo::time_ago; it must be a DateTime object if provided')
@@ -151,15 +151,6 @@ sub time_ago {
     return 'millenia ago'
 }
 
-sub get_datetime_from_timestamp {
-    my ($time) = @_;
-    my %d;
-    @d{qw(second minute hour day month year)} = localtime($time);
-    $d{year} += 1900;
-    $d{month} += 1;
-    return DateTime->new(%d)
-}
-
 1
 
 __END__
@@ -186,8 +177,6 @@ DateTime::TimeAgo -- express dates as fuzzy human-friendly strings
  
  print time_ago($then);
  # $now taken from C<time> function
- 
- my $DateTime_object = DateTime::TimeAgo::get_datetime_from_timestamp(time);
 
 =head1 DESCRIPTION
 
@@ -214,13 +203,6 @@ substituted.
 
 Returns a string expression of the interval between the two DateTime
 objects, like C<several hours ago>, C<yesterday> or <last century>.
-
-=item get_datetime_from_timestamp($unix_timestamp);
-
-Not exportable.
-
-Returns a DateTime object based on the provided timestamp, as returned
-by the C<time> function.
 
 =back
 

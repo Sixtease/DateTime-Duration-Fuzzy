@@ -178,7 +178,7 @@ DateTime::TimeAgo -- express dates as fuzzy human-friendly strings
     hour => 19, minute => 59,
  );
  my $then = DateTime->new(
-    year => 2010, month => 12, day => 12
+    year => 2010, month => 12, day => 12,
     hour => 15,
  );
  print time_ago($then, $now);
@@ -226,7 +226,7 @@ by the C<time> function.
 
 =head1 AUTHOR
 
-Jan Oldrich Kruza, C<< <sixtase at cpan.org> >>
+Jan Oldrich Kruza, C<< <sixtease at cpan.org> >>
 
 =head1 LICENSE AND COPYRIGHT
 

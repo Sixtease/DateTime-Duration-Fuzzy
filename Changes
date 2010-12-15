@@ -3,3 +3,8 @@ Revision history for DateTime-TimeAgo
 0.01    2010-12-12 20:19
         First version, released on an unsuspecting world.
 
+0.02    2010-12-15 14:15
+        Renamed to DateTime::Duration::Fuzzy.
+        Now creating DateTime objects with the from_epoch method.
+        Fixed some typos.
+        thanks to moritz the perlmonk

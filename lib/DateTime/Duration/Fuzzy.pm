@@ -11,7 +11,7 @@ use integer;
 
 our @EXPORT_OK = qw(time_ago);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub time_ago {
     my ($time, $now) = @_;

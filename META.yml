@@ -1,5 +1,5 @@
 --- #YAML:1.0
-name: DateTime::TimeAgo
+name: DateTime::Duration::Fuzzy
 abstract: 'Express time intervals in fuzzy, human-friendly strings'
 version: 0.01
 author:

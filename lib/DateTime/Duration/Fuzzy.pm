@@ -1,4 +1,4 @@
-package DateTime::TimeAgo;
+package DateTime::Duration::Fuzzy;
 
 use strict;
 use utf8;
@@ -17,13 +17,13 @@ sub time_ago {
     my ($time, $now) = @_;
     
     if (not defined $time or not isa($time, 'DateTime')) {
-        croak('DateTime::TimeAgo::time_ago needs a DateTime object as first parameter')
+        croak('DateTime::Duration::Fuzzy::time_ago needs a DateTime object as first parameter')
     }
     if (not defined $now) {
         $now = DateTime->now();
     }
     if (not isa($now, 'DateTime')) {
-        croak('Invalid second parameter provided to DateTime::TimeAgo::time_ago; it must be a DateTime object if provided')
+        croak('Invalid second parameter provided to DateTime::Duration::Fuzzy::time_ago; it must be a DateTime object if provided')
     }
     
     if (DateTime->compare($time, $now) > 0) {
@@ -157,11 +157,11 @@ __END__
 
 =head1 NAME
 
-DateTime::TimeAgo -- express dates as fuzzy human-friendly strings
+DateTime::Duration::Fuzzy -- express dates as fuzzy human-friendly strings
 
 =head1 SYNOPSIS
 
- use DateTime::TimeAgo qw(time_ago);
+ use DateTime::Duration::Fuzzy qw(time_ago);
  use DateTime;
  
  my $now = DateTime->new(
@@ -180,7 +180,7 @@ DateTime::TimeAgo -- express dates as fuzzy human-friendly strings
 
 =head1 DESCRIPTION
 
-DateTime::TimeAgo is inspired from the timeAgo jQuery module
+DateTime::Duration::Fuzzy is inspired from the timeAgo jQuery module
 L<http://timeago.yarp.com/>.
 
 It takes two DateTime objects -- first one representing a moment in the past

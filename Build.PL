@@ -3,10 +3,10 @@ use warnings;
 use Module::Build;
 
 my $builder = Module::Build->new(
-    module_name         => 'DateTime::TimeAgo',
+    module_name         => 'DateTime::Duration::Fuzzy',
     license             => 'perl',
     dist_author         => q{Jan Oldrich Kruza <sixtease@cpan.org>},
-    dist_version_from   => 'lib/DateTime/TimeAgo.pm',
+    dist_version_from   => 'lib/DateTime/Duration/Fuzzy.pm',
     requires => {
         'DateTime' => 0,
         'DateTime::Duration' => 0,
@@ -14,7 +14,7 @@ my $builder = Module::Build->new(
     build_requires => {
         'Test::More' => 0,
     },
-    add_to_cleanup      => [ 'DateTime-TimeAgo-*' ],
+    add_to_cleanup      => [ 'DateTime-Duration-Fuzzy-*' ],
     create_makefile_pl => 'traditional',
 );
 

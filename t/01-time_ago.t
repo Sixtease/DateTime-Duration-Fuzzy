@@ -3,7 +3,7 @@
 use Test::More tests => 33;
 
 BEGIN {
-    use_ok( 'DateTime::TimeAgo', qw(time_ago) ) || print "Bail out!
+    use_ok( 'DateTime::Duration::Fuzzy', qw(time_ago) ) || print "Bail out!
 ";
     use_ok('DateTime');
     use_ok('DateTime::Duration');

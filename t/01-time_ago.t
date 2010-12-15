@@ -40,10 +40,10 @@ t($now - dur(minutes => 60), $now, 'about an hour ago');
 
 t($now - dur(minutes => 100), $now, 'more than an hour ago');
 
-t($now - dur(hours => 4), $now, 'several hours ago');
+t($now - dur(hours => 4, minutes => 2), $now, 'several hours ago');
 
 $now = dt(year => 2010, month => 12, day => 12, hour => 23);
-my $then = $now->clone->set_hour(3);
+my $then = $now->clone->set_hour(3)->subtract(minutes => 2);
 t($then, $now, 'tonight');
 
 $then->set_hour(8);
@@ -52,7 +52,7 @@ t($then, $now, 'this morning');
 $then->set_hour(12);
 t($then, $now, 'today');
 
-$then->set_hour(17);
+$then->set_hour(16);
 t($then, $now, 'this afternoon');
 
 $then->set_day(11);

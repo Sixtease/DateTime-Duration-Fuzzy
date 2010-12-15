@@ -9,7 +9,6 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/DateTime/Duration/Fuzzy.pm',
     requires => {
         'DateTime' => 0,
-        'DateTime::Duration' => 0,
     },
     build_requires => {
         'Test::More' => 0,

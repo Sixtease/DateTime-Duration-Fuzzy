@@ -8,6 +8,5 @@ license: perl
 distribution_type: module
 requires:
     DateTime: 0
-    DateTime::Duration: 0
 build_requires:
     Test::More: 0

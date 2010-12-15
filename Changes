@@ -11,3 +11,5 @@ Revision history for DateTime-TimeAgo
 
 0.03    2010-12-15 16:12
         No longer relying on DT::Duration->in_units method.
+        Added 'several months ago' and 'about a year ago'.
+        Removed 'this year'.

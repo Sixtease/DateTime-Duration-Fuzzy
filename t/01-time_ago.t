@@ -1,6 +1,6 @@
 #!perl -T
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 
 BEGIN {
     use_ok( 'DateTime::Duration::Fuzzy', qw(time_ago) ) || print "Bail out!
@@ -72,12 +72,15 @@ $then->set_month(11);
 t($then, $now, 'last month');
 
 $then->set_month(9);
-t($then, $now, 'this year');
+t($then, $now, 'several months ago');
+
+$then->set_month(1);
+t($then, $now, 'about a year ago');
 
 $then->set_year(2009);
 t($then, $now, 'last year');
 
-$then->set_year(2008);
+$then->set_year(2008)->set_month(9);
 $now->set_month(6);
 t($then, $now, 'more than a year ago');
 

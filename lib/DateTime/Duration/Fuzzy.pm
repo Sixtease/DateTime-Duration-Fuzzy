@@ -107,8 +107,14 @@ sub time_ago {
         return 'last month'
     }
     
-    if ($time->year == $now->year) {
-        return 'this year'
+    $treshold = $now->clone->subtract(months => 10);
+    if (_cmp($time, $treshold) > 0) {
+        return 'several months ago'
+    }
+    
+    $treshold = $now->clone->subtract(months => 14);
+    if (_cmp($time, $treshold) > 0) {
+        return 'about a year ago'
     }
     
     if ($time->year == $now->year - 1) {

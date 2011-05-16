@@ -3,68 +3,24 @@ package DateTime::Duration::Fuzzy;
 use strict;
 use utf8;
 use DateTime;
-use UNIVERSAL qw(isa);
 use Carp;
 use Exporter qw(import);
 use integer;
 
 our @EXPORT_OK = qw(time_ago);
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
-sub _cmp { DateTime->compare(@_) }
-
-sub time_ago {
-    my ($time, $now) = @_;
-    
-    if (not defined $time or not isa($time, 'DateTime')) {
-        croak('DateTime::Duration::Fuzzy::time_ago needs a DateTime object as first parameter')
-    }
-    if (not defined $now) {
-        $now = DateTime->now();
-    }
-    if (not isa($now, 'DateTime')) {
-        croak('Invalid second parameter provided to DateTime::Duration::Fuzzy::time_ago; it must be a DateTime object if provided')
-    }
-    
-    if (_cmp($time, $now) > 0) {
-        return 'in the future'
-    }
-    
-    my $treshold;
-    
-    $treshold = $now->clone->subtract(minutes => 1);
-    if (_cmp($time, $treshold) > 0) {
-        return 'just now'
-    }
-    
-    $treshold = $now->clone->subtract(minutes => 15);
-    if (_cmp($time, $treshold) > 0) {
-        return 'a few minutes ago'
-    }
-    
-    $treshold = $now->clone->subtract(minutes => 50);
-    if (_cmp($time, $treshold) > 0) {
-        return 'less than an hour ago'
-    }
-    
-    $treshold = $now->clone->subtract(minutes => 75);
-    if (_cmp($time, $treshold) > 0) {
-        return 'about an hour ago'
-    }
-    
-    $treshold = $now->clone->subtract(hours => 2);
-    if (_cmp($time, $treshold) > 0) {
-        return 'more than an hour ago'
-    }
-    
-    $treshold = $now->clone->subtract(hours => 6);
-    if (_cmp($time, $treshold) > 0) {
-        return 'several hours ago'
-    }
-    
-    $treshold = $now->clone->subtract(days => 2);
-    if (_cmp($time, $treshold) > 0 and $time->day == $now->day) {
+my @ranges = (
+    [ -1, 'in the future' ],
+    [ 60, 'just now' ],
+    [ 900, 'a few minutes ago'], # 15*60
+    [ 3000, 'less than an hour ago'], # 50*60
+    [ 4500, 'about an hour ago'], # 75*60
+    [ 7200, 'more than an hour ago'], # 2*60*60
+    [ 21600, 'several hours ago'], # 6*60*60
+    [ 86400, 'today', sub {        # 24*60*60
+        my $time = shift;
         if ($time->hour < 5) {
             return 'tonight'
         }
@@ -77,101 +33,61 @@ sub time_ago {
         if ($time->hour < 19) {
             return 'this afternoon'
         }
-        # this should actually never happen
         return 'this evening'
-    }
-    
-    my $yesterday = $now->clone->subtract(days => 1);
-    if ($time->ymd eq $yesterday->ymd) {
-        return 'yesterday'
-    }
-    
-    $treshold = $now->clone->subtract(days => 14);
-    if (_cmp($time, $treshold) > 0 and $time->week_number == $now->week_number) {
-        return 'this week'
-    }
-    
-    my $last_week = $now->clone->subtract(days => 7);
-    $treshold = $now->clone->subtract(days => 21);
-    if (_cmp($time, $treshold) > 0 and $time->week_number == $last_week->week_number) {
-        return 'last week'
-    }
-    
-    if ($time->year == $now->year and $time->month == $now->month) {
-        return 'this month'
-    }
-    
-    my $last_month = $now->clone->subtract(months => 1);
-    $treshold = $now->clone->subtract(months => 3);
-    if (_cmp($time, $treshold) > 0 and $time->month == $last_month->month) {
+    }],
+    [ 172800, 'yesterday'], # 2*24*60*60
+    [ 604800, 'this week'], # 7*24*60*60
+    [ 1209600, 'last week'], # 2*7*24*60*60 
+    [ 2678400, 'this month', sub { # 31*24*60*60
+        my $time = shift;
+        my $now = shift;
+        if ($time->year == $now->year and $time->month == $now->month) {
+            return 'this month'
+        }
         return 'last month'
+    }],
+    [ 5356800, 'last month'], # 2*31*24*60*60
+    [ 24105600, 'several months ago'], # 9*31*24*60*60
+    [ 31536000, 'about a year ago'], # 365*24*60*60
+    [ 34214400, 'last year'], # (365+31)*24*60*60
+    [ 63072000, 'more than a year ago'], # 2*365*24*60*60
+    [ 283824000, 'several years ago'], # 9*365*24*60*60
+    [ 315360000, 'about a decade ago'], # 10*365*24*60*60
+    [ 630720000, 'last decade'], # 20*365*24*60*60
+    [ 2838240000, 'several decades ago'], # 90*365*24*60*60
+    [ 3153600000, 'about a century ago'], # 100*365*24*60*60
+    [ 6307200000, 'last century'], # 200*365*24*60*60
+    [ 6622560000, 'more than a century ago'], # 210*365*24*60*60
+    [ 28382400000, 'several centuries ago'], # 900*365*24*60*60
+    [ 31536000000, 'about a millenium ago'], # 1000*365*24*60*60
+    [ 63072000000, 'more than a millenium ago'], # 2000*365*24*60*60
+);
+    
+sub time_ago {
+    my ($time, $now) = @_;
+    
+    if (not defined $time or not $time->isa('DateTime')) {
+        croak('DateTime::Duration::Fuzzy::time_ago needs a DateTime object as first parameter')
+    }
+    if (not defined $now) {
+        $now = DateTime->now();
+    }
+    if (not $now->isa('DateTime')) {
+        croak('Invalid second parameter provided to DateTime::Duration::Fuzzy::time_ago; it must be a DateTime object if provided')
     }
     
-    $treshold = $now->clone->subtract(months => 10);
-    if (_cmp($time, $treshold) > 0) {
-        return 'several months ago'
-    }
-    
-    $treshold = $now->clone->subtract(months => 14);
-    if (_cmp($time, $treshold) > 0) {
-        return 'about a year ago'
-    }
-    
-    if ($time->year == $now->year - 1) {
-        return 'last year'
-    }
-    
-    $treshold = $now->clone->subtract(years => 2);
-    if (_cmp($time, $treshold) > 0) {
-        return 'more than a year ago'
-    }
-    
-    $treshold = $now->clone->subtract(years => 9);
-    if (_cmp($time, $treshold) > 0) {
-        return 'several years ago'
-    }
-    
-    $treshold = $now->clone->subtract(years => 12);
-    if (_cmp($time, $treshold) > 0) {
-        return 'about a decade ago'
-    }
-    
-    if ($time->year / 10 == $now->year / 10 - 1) {
-        return 'last decade'
-    }
-    
-    $treshold = $now->clone->subtract(years => 90);
-    if (_cmp($time, $treshold) > 0) {
-        return 'several decades ago'
-    }
-    
-    $treshold = $now->clone->subtract(years => 120);
-    if (_cmp($time, $treshold) > 0) {
-        return 'about a century ago'
-    }
-    
-    if ($time->year / 100 == $now->year / 100 - 1) {
-        return 'last century'
-    }
-    
-    $treshold = $now->clone->subtract(years => 200);
-    if (_cmp($time, $treshold) > 0) {
-        return 'more than a century ago'
-    }
-    
-    $treshold = $now->clone->subtract(years => 900);
-    if (_cmp($time, $treshold) > 0) {
-        return 'several centuries ago'
-    }
-    
-    $treshold = $now->clone->subtract(years => 1200);
-    if (_cmp($time, $treshold) > 0) {
-        return 'about a millenium ago'
-    }
-    
-    $treshold = $now->clone->subtract(years => 2000);
-    if (_cmp($time, $treshold) > 0) {
-        return 'more than a millenium ago'
+    # Use clones in UTC for safe date calculation
+    my $now_clone = $now->clone->set_time_zone('UTC');
+    my $time_clone = $time->clone->set_time_zone('UTC');
+    my $dur = $now_clone->subtract_datetime_absolute( $time_clone )->in_units('seconds');
+
+    foreach my $range ( @ranges ) {
+        if ( $dur <= $range->[0] ) {
+            if ( $range->[2] ) {
+                return $range->[2]->( $time_clone, $now_clone )
+            }
+            return $range->[1]
+        }
     }
     
     return 'millenia ago'

@@ -77,7 +77,7 @@ t($then, $now, 'several months ago');
 $then->set_month(1);
 t($then, $now, 'about a year ago');
 
-$then->set_year(2009);
+$then->set_year(2009)->set_month(12);
 t($then, $now, 'last year');
 
 $then->set_year(2008)->set_month(9);
@@ -87,7 +87,7 @@ t($then, $now, 'more than a year ago');
 $then->set_year(2003);
 t($then, $now, 'several years ago');
 
-$then->set_year(1998);
+$then->set_year(2000);
 t($then, $now, 'about a decade ago');
 
 $then->set_year(1991);
@@ -97,7 +97,7 @@ t($then, $now, 'last decade');  # very decadent
 $then->set_year(1975);
 t($then, $now, 'several decades ago');
 
-$then->set_year(1901);
+$then->set_year(1910);
 t($then, $now, 'about a century ago');
 
 $now->set_year(2053);
@@ -106,11 +106,12 @@ t($then, $now, 'last century');
 $then->set_year(1784);
 t($then, $now, 'several centuries ago');
 
-$then->set_year(1050);
+$then->set_year(1054);
 t($then, $now, 'about a millenium ago');
 
-$now->set_year(2500);
+$now->set_year(2010);
+$then->set_year(1009);
 t($then, $now, 'more than a millenium ago');
 
-$then->set_year(444);
+$then->set_year(1);
 t($then, $now, 'millenia ago');

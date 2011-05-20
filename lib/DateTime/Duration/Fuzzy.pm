@@ -5,11 +5,12 @@ use utf8;
 use DateTime;
 use Carp;
 use Exporter qw(import);
-use integer;
+
+use if $ENV{ARCH_64BIT}, 'integer';
 
 our @EXPORT_OK = qw(time_ago);
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 my @ranges = (
     [ -1, 'in the future' ],
@@ -147,6 +148,15 @@ Returns a string expression of the interval between the two DateTime
 objects, like C<several hours ago>, C<yesterday> or <last century>.
 
 =back
+
+=head2 performance
+
+On 64bit machines, it is asvisable to 'use integer', which makes
+the calculations faster. You can turn this on by setting the
+C<ARCH_64BIT> environmental variable to a true value.
+
+If you do this on a 32bit machine, you will get wrong results for
+intervals starting with "several decades ago".
 
 =head1 AUTHOR
 

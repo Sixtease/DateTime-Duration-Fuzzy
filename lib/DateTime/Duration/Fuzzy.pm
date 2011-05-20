@@ -5,11 +5,12 @@ use utf8;
 use DateTime;
 use Carp;
 use Exporter qw(import);
-use integer;
+
+use if $ENV{ARCH_64BIT}, 'integer';
 
 our @EXPORT_OK = qw(time_ago);
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 my @ranges = (
     [ -1, 'in the future' ],

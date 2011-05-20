@@ -1,5 +1,10 @@
 Revision history for DateTime-TimeAgo
 
+0.05    2011-05-20 17:37
+        Removed 'use integer' as it makes high number operations
+        fail on 32bit systems. Enable the ARCH_64BIT environmental
+        variable to 'use integer' (which adds to performance).
+
 0.04    2011-05-16 10:36
         Optimized for speed;
         thanks for patch to pepl (@CPAN).

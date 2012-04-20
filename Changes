@@ -1,5 +1,10 @@
 Revision history for DateTime-TimeAgo
 
+0.06    2012-04-20 16:43
+        Fixed a bug where yesterday but less than 24 hours ago
+        would be evaluated to 'this evening or some such'.
+        Thanks to Ben Rogers (bdr.org) for bug report.
+
 0.05    2011-05-20 17:37
         Removed 'use integer' as it makes high number operations
         fail on 32bit systems. Enable the ARCH_64BIT environmental

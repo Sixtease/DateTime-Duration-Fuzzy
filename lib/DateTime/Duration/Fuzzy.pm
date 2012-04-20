@@ -10,7 +10,7 @@ use if $ENV{ARCH_64BIT}, 'integer';
 
 our @EXPORT_OK = qw(time_ago);
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my @ranges = (
     [ -1, 'in the future' ],
@@ -22,6 +22,13 @@ my @ranges = (
     [ 21600, 'several hours ago'], # 6*60*60
     [ 86400, 'today', sub {        # 24*60*60
         my $time = shift;
+        my $now = shift;
+        if (   $time->day   < $now->day
+            or $time->month < $now->month
+            or $time->year  < $now->year
+        ) {
+            return 'yesterday'
+        }
         if ($time->hour < 5) {
             return 'tonight'
         }

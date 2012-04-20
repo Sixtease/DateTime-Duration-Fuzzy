@@ -1,6 +1,6 @@
 #!perl -T
 
-use Test::More tests => 34;
+use Test::More tests => 35;
 
 BEGIN {
     use_ok( 'DateTime::Duration::Fuzzy', qw(time_ago) ) || print "Bail out!
@@ -56,6 +56,9 @@ $then->set_hour(16);
 t($then, $now, 'this afternoon');
 
 $then->set_day(11);
+t($then, $now, 'yesterday');
+
+$now->set_hour(9);
 t($then, $now, 'yesterday');
 
 $now->set_day(10);
